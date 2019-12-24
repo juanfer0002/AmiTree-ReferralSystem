@@ -1,0 +1,40 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {
+        "object-literal-sort-keys": false
+    },
+    "rules": {
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "object-literal-sort-keys": false,
+        "max-classes-per-file": false,
+        "no-console": [
+            true,
+            "warning"
+        ],
+        "no-unused-expression": [
+            true,
+            "allow-fast-null-checks"
+        ],
+        "space-before-function-paren": [
+            true,
+            {
+                "anonymous": "always"
+            }
+        ],
+        "trailing-comma": [
+            false
+        ],
+        "triple-equals": false
+    },
+    "rulesDirectory": [],
+    "include": [
+        "src/**/*",
+        "test/**/*"
+    ]
+}
