@@ -1,0 +1,78 @@
+<mdb-navbar SideClass="navbar navbar-expand-lg" mdbFixedHeader>
+
+    <mdb-navbar-brand class="m-auto">
+        <a class="navbar-brand" href="#">
+            <img src="assets/mini-logo.png" class="img-fluid rounded-circle logo-brand mr-2" alt="Responsive image">
+        </a>
+    </mdb-navbar-brand>
+
+</mdb-navbar>
+
+<div class="container pt-5">
+    <div class="row">
+
+        <div class="col-lg-4 mr-auto ml-auto">
+            <div class="container" [ngSwitch]="activeChild">
+
+                <div class="animated fadeInRight">
+
+                    <mdb-card>
+                        <mdb-card-body>
+                            <mdb-card-title>
+                                <h4>Sign in</h4>
+                            </mdb-card-title>
+
+                            <div class="divider dropdown-divider"></div>
+
+                            <form [formGroup]="signinForm" (submit)="signIn()" novalidate autocomplete="off">
+
+                                <div class="md-form">
+                                    <label for="email">Email *</label>
+                                    <input id="email" mdbInput mdbValidate [validateError]="submitted" type="text"
+                                        class="form-control" formControlName="email">
+
+                                    <mdb-error *ngIf="submitted && !fields.email.valid">
+                                        <span
+                                            *ngIf="fields.email.errors.required">{{formErrorMsgs.REQUIRED_ERROR}}</span>
+                                        <span *ngIf="fields.email.errors.email">{{formErrorMsgs.EMAIL_ERROR}}</span>
+                                        <span *ngIf="fields.email.errors.maxlength">
+                                            {{formErrorMsgs.MAX_LENGTH_ERROR}}
+                                            {{fields.email.errors.maxlength.requiredLength}}
+                                        </span>
+                                    </mdb-error>
+
+                                </div>
+
+                                <div class="md-form">
+                                    <label for="password">Password *</label>
+                                    <input id="password" mdbInput mdbValidate [validateError]="submitted"
+                                        type="password" class="form-control" formControlName="password">
+
+                                    <mdb-error *ngIf="submitted && !fields.password.valid">
+                                        <span
+                                            *ngIf="fields.password.errors.required">{{formErrorMsgs.REQUIRED_ERROR}}</span>
+                                        <span *ngIf="fields.password.errors.maxlength">
+                                            {{formErrorMsgs.MAX_LENGTH_ERROR}}
+                                            {{fields.password.errors.maxlength.requiredLength}}
+                                        </span>
+                                    </mdb-error>
+                                </div>
+
+                                <button mdbBtn class="btn-block mt-5" color="primary" type="submit" mdbWavesEffect>
+                                    Sign in
+                                </button>
+
+                                <a mdbBtn class="btn-block mt-3" color="success" routerLink="/signup" mdbWavesEffect>
+                                    Sign Up
+                                </a>
+                            </form>
+                        </mdb-card-body>
+                    </mdb-card>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

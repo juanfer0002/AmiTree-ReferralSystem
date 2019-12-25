@@ -16,15 +16,6 @@ export interface ITokenResponse {
     token: string;
 }
 
-export interface IPasswordRecovery {
-    email: string;
-}
-
-export interface IPasswordReset {
-    password: string;
-    token: string;
-}
-
 const SALT_ROUNDS = 10;
 export class PasswordUtils {
 

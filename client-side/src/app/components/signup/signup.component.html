@@ -1,0 +1,118 @@
+<mdb-navbar SideClass="navbar navbar-expand-lg" mdbFixedHeader>
+
+    <mdb-navbar-brand class="m-auto">
+        <a class="navbar-brand" href="#">
+            <img src="assets/mini-logo.png" class="img-fluid rounded-circle logo-brand mr-2" alt="Responsive image">
+        </a>
+    </mdb-navbar-brand>
+
+</mdb-navbar>
+
+<div class="container pt-5">
+    <div class="row">
+
+        <div class="col-lg-4 mr-auto ml-auto">
+            <div class="container" [ngSwitch]="activeChild">
+
+                <div class="animated fadeInRight">
+
+                    <mdb-card>
+                        <mdb-card-body>
+                            <mdb-card-title>
+                                <h4>Sign up</h4>
+                            </mdb-card-title>
+
+                            <div class="divider dropdown-divider"></div>
+
+                            <form [formGroup]="signupForm" (submit)="signUp()" novalidate autocomplete="off">
+
+                                <div class="md-form">
+                                    <label for="firstName">First Name *</label>
+                                    <input id="firstName" mdbInput mdbValidate [validateError]="submitted" type="text"
+                                        class="form-control" formControlName="firstName">
+
+                                    <mdb-error *ngIf="submitted && !fields.firstName.valid">
+                                        <span
+                                            *ngIf="fields.firstName.errors.required">{{formErrorMsgs.REQUIRED_ERROR}}</span>
+                                        <span *ngIf="fields.firstName.errors.maxlength">
+                                            {{formErrorMsgs.MAX_LENGTH_ERROR}}
+                                            {{fields.firstName.errors.maxlength.requiredLength}}
+                                        </span>
+                                    </mdb-error>
+                                </div>
+
+                                <div class="md-form">
+                                    <label for="lastName">Last Name *</label>
+                                    <input id="lastName" mdbInput mdbValidate [validateError]="submitted" type="text"
+                                        class="form-control" formControlName="lastName">
+
+                                    <mdb-error *ngIf="submitted && !fields.lastName.valid">
+                                        <span
+                                            *ngIf="fields.lastName.errors.required">{{formErrorMsgs.REQUIRED_ERROR}}</span>
+                                        <span *ngIf="fields.lastName.errors.maxlength">
+                                            {{formErrorMsgs.MAX_LENGTH_ERROR}}
+                                            {{fields.lastName.errors.maxlength.requiredLength}}
+                                        </span>
+                                    </mdb-error>
+                                </div>
+
+                                <div class="md-form">
+                                    <label for="email">Email *</label>
+                                    <input id="email" mdbInput mdbValidate [validateError]="submitted" type="text"
+                                        class="form-control" formControlName="email">
+
+                                    <mdb-error *ngIf="submitted && !fields.email.valid">
+                                        <span
+                                            *ngIf="fields.email.errors.required">{{formErrorMsgs.REQUIRED_ERROR}}</span>
+                                        <span *ngIf="fields.email.errors.email">{{formErrorMsgs.EMAIL_ERROR}}</span>
+                                        <span *ngIf="fields.email.errors.maxlength">
+                                            {{formErrorMsgs.MAX_LENGTH_ERROR}}
+                                            {{fields.email.errors.maxlength.requiredLength}}
+                                        </span>
+                                    </mdb-error>
+                                </div>
+
+                                <div class="md-form">
+                                    <label for="password">Password *</label>
+                                    <input id="password" mdbInput mdbValidate [validateError]="submitted"
+                                        type="password" class="form-control" formControlName="password">
+
+                                    <mdb-error *ngIf="submitted && !fields.password.valid">
+                                        <span
+                                            *ngIf="fields.password.errors.required">{{formErrorMsgs.REQUIRED_ERROR}}</span>
+                                        <span *ngIf="fields.password.errors.maxlength">
+                                            {{formErrorMsgs.MAX_LENGTH_ERROR}}
+                                            {{fields.password.errors.maxlength.requiredLength}}
+                                        </span>
+                                    </mdb-error>
+                                </div>
+
+                                <div class="md-form">
+                                    <label for="repeatPassword">Repeat Password *</label>
+                                    <input id="repeatPassword" mdbInput mdbValidate [validateError]="submitted"
+                                        type="password" class="form-control" formControlName="repeatPassword">
+
+                                    <mdb-error *ngIf="submitted && !fields.repeatPassword.valid">
+                                        <span *ngIf="fields.repeatPassword.errors.required">
+                                            {{formErrorMsgs.REQUIRED_ERROR}}
+                                        </span>
+                                        <span *ngIf="fields.repeatPassword.errors.samePasswords">
+                                            {{formErrorMsgs.NOT_SAME_PASSWORDS}}
+                                        </span>
+                                    </mdb-error>
+                                </div>
+
+                                <button mdbBtn class="btn-block mt-5" color="primary" type="submit" mdbWavesEffect>
+                                    Complete signup
+                                </button>
+                            </form>
+                        </mdb-card-body>
+                    </mdb-card>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

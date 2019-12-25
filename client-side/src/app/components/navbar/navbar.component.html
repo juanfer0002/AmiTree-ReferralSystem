@@ -1,0 +1,48 @@
+<mdb-navbar SideClass="navbar navbar-expand-lg navbar-dark bg-primary" [containerInside]="false">
+
+    <mdb-navbar-brand>
+        <a class="navbar-brand" href="#">
+            <img src="assets/mini-logo.png" class="img-fluid z-depth-1 rounded-circle logo-brand mr-2"
+                alt="Responsive image">Amitree Referral System
+        </a>
+    </mdb-navbar-brand>
+
+    <links>
+
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link waves-light" mdbWavesEffect routerLink="/referrals">Referrals</a>
+            </li>
+
+            <!-- <li class="nav-item dropdown" dropdown>
+                <a dropdownToggle mdbWavesEffect type="button" class="nav-link dropdown-toggle waves-light"
+                    mdbWavesEffect>
+                    Statistics<span class="caret"></span>
+                </a>
+                <div *dropdownMenu class="dropdown-menu dropdown dropdown-primary" role="menu">
+                    <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/analytics">Analytics</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/usage">Usage</a>
+                    <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/savings">Savings</a>
+                </div>
+            </li> -->
+
+        </ul>
+
+        <ul class="navbar-nav ml-auto nav-flex-icons">
+            <li class="nav-item avatar dropdown left-10" dropdown>
+
+                <a dropdownToggle class="nav-link dropdown-toggle" type="button" mdbWavesEffect>
+                    <img src="assets/avatar.png" class="rounded-circle z-depth-0" alt="avatar image" height="40">
+                </a>
+                <div *dropdownMenu class="dropdown-menu dropdown-menu-right dropdown dropdown-primary" role="menu">
+                    <a class="dropdown-item waves-light" mdbWavesEffect routerLink="/account">Account</a>
+                    <div class="divider dropdown-divider"></div>
+                    <a class="dropdown-item waves-light" mdbWavesEffect (click)="logout()">Log out</a>
+                </div>
+
+            </li>
+        </ul>
+
+    </links>
+
+</mdb-navbar>
