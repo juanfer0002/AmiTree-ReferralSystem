@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
-import { IAuth, ITokenResponse, PasswordUtils, ISignUp } from '../common/auth/auth';
-import { UnauthorizedError, EmailAlreadyInUseError } from '../common/auth/auth-errors';
+import { IAuth, ISignUp, ITokenResponse, PasswordUtils } from '../common/auth/auth';
+import { EmailAlreadyInUseError, UnauthorizedError } from '../common/auth/auth-errors';
+import { AssertUtils } from '../common/utilities/assert-utils';
 import { IUser } from '../model/user.model';
 import UserRepository from '../repositories/user.repository';
-import { AssertUtils } from '../common/utilities/assert-utils';
 
 const JWT_SECRET_PASS: string = process.env.TOKEN_PASS;
 const DAY_IN_SECS = 60 * 60 * 24;
@@ -25,7 +25,7 @@ class AuthService {
 
     public static async signUp(signup: ISignUp): Promise<void> {
         const user = signup.user;
-        await AuthService.assertUserIsValid(user)
+        await AuthService.assertUserIsValid(user);
 
         const referralCode = signup.referral;
         if (referralCode) {
@@ -51,7 +51,6 @@ class AuthService {
         await AuthService.assertEmailInUse(user.email);
     }
 
-
     private static async assertEmailInUse(email: string): Promise<void> {
         const foundUser = await UserRepository.findByEmail(email);
 
@@ -63,7 +62,6 @@ class AuthService {
     private static async validateAndAddCreditToReferralUser(referralCode: string): Promise<void> {
         // TODO: implement
     }
-
 
 }
 

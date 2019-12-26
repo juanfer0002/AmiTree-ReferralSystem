@@ -11,6 +11,7 @@ const routes: Routes = [
     { path: '', redirectTo: 'signin', pathMatch: 'full' },
     { path: 'signin', component: SigninComponent, canActivate: [CanActivateRouteGuard] },
     { path: 'signup', component: SignupComponent, canActivate: [CanActivateRouteGuard] },
+    { path: 'signup/:id', component: SignupComponent, canActivate: [CanActivateRouteGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [CanActivateRouteGuard] },
     { path: 'account', component: AccountComponent, canActivate: [CanActivateRouteGuard] },
 

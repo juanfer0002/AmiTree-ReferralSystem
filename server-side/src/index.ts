@@ -8,6 +8,7 @@ import mongoStart from './common/start-scripts/mongo-start';
 import { HttpUtils } from './common/utilities/http-utils';
 import { LoggerUtils } from './common/utilities/logger-utils';
 import auth from './routes/auth.route';
+import referral from './routes/referral.route';
 import user from './routes/user.route';
 
 mongoStart();
@@ -35,7 +36,7 @@ app.use((req: Request, res: Response, next) => {
 
 // Secured routes
 app.use('/user', user);
-
+app.use('/referral', referral);
 
 // start the Express server
 app.listen(port, () => {
@@ -47,7 +48,6 @@ logger.info('System is almost ready... waiting confirmation message...');
 DeploymentCheckList.onEverythingSetup = () => {
     logger.info('CONFIRMED!! SERVER IS UP');
 };
-
 
 // Unhandled promises's rejections
 process.on('unhandledRejection', (reason: Error) => {

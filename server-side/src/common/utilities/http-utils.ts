@@ -1,8 +1,8 @@
 import { Request } from 'express-serve-static-core';
 import jwt from 'jsonwebtoken';
 import { EmailAlreadyInUseError, ForbiddenError, UnauthorizedError } from '../auth/auth-errors';
-import { LoggerUtils } from './logger-utils';
 import { AssertionError } from './assert-utils';
+import { LoggerUtils } from './logger-utils';
 
 const JWT_SECRET_PASS: string = process.env.TOKEN_PASS;
 const TOKEN_PREFIX = 'Bearer ';

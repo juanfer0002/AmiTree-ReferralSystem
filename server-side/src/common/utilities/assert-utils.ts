@@ -6,7 +6,7 @@ export class AssertUtils {
 
     public static assertNull(value: any, assertionMsg?: string) {
         if (value == null) {
-            throw new NullAssertionError(assertionMsg)
+            throw new NullAssertionError(assertionMsg);
         }
     }
 
@@ -18,9 +18,7 @@ export class AssertUtils {
         }
     }
 
-
 }
-
 
 export class AssertionError extends Error {
 

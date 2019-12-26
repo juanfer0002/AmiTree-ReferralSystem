@@ -48,6 +48,7 @@ You must set up the following environment variables:
 - ENABLE_CONSOLE_LOG: (optional) if in production mode you need to see logs in console set this environment variable to true. It's true in dev mode
 - LOG_LEVEL: (default: debug) available options: emerg, alert, crit, error, warning, notice, info, debug (from Highest to lowest priority)
 - LOG_PATH: (default: logs/) disk path location where logs should be put, this is a folder path.
+- MAX_REFERRALS_BY_CODE: maximum amount of users that can join by a single referral
 
 You can use `.env` file where you set up those variables, located directly in server-side folder.
 The following example can work for development evironment
@@ -57,9 +58,13 @@ The following example can work for development evironment
 SERVER_PORT=8080
 TOKEN_PASS=secrete_pass
 
+MONGO_URL=mongodb://localhost/referral-system
+
 ENABLE_CONSOLE_LOG=true
 LOG_LEVEL=info
 LOG_PATH=logs/
+
+MAX_REFERRALS_BY_CODE = 5
 ```
 You must now be ready to start developing
 

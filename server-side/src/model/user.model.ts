@@ -10,6 +10,7 @@ export interface IUser {
     email: string;
     password: string;
     credit: number;
+    joinDate?: Date;
 }
 
 // To not expose mongo db functions trough interface
@@ -22,11 +23,13 @@ const UserSchema = new Schema({
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    credit: { type: Number, required: true, default: true },
+    credit: { type: Number, required: true, default: 0 },
+    joinDate: { type: Date },
 });
 
 UserSchema.pre('save', function (this: IUserDocument, next) {
     this.email = this.email.toLowerCase();
+    this.joinDate = new Date();
     next();
 });
 
@@ -36,7 +39,7 @@ UserSchema.pre('updateOne', function (this: Query<IUserDocument>, next) {
         updateObj.email = updateObj.email.toLowerCase();
     }
 
-    updateObj.updateDate = new Date();
+    delete updateObj.joinDate;
     next();
 });
 

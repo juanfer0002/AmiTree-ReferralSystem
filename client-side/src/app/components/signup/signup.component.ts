@@ -16,6 +16,7 @@ export class SignupComponent implements OnInit {
     formErrorMsgs = FORM_ERROR_MSGS;
     signupMsgs = SIGNUP_MSGS;
 
+    disableSubmit = false;
     submitted = false;
     signupForm: FormGroup;
 
@@ -69,7 +70,8 @@ export class SignupComponent implements OnInit {
 
             await this.authService.signUp(auth).toPromise();
             this.alert.popSuccess(this.signupMsgs.SUCCESS);
-
+            this.disableSubmit = true;
+            setTimeout(() => window.location.reload(), 2000);
         } else {
             this.alert.popWarn(this.formErrorMsgs.FORM_ERRORS);
         }

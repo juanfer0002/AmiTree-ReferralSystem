@@ -24,6 +24,7 @@ import { AlertModalComponent } from './shared/components/alert-modal/alert-modal
 
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
+import { ReferralService } from './services/referral.service';
 import { LoadingScreen } from './shared/utils/loading-screen.utils';
 
 import { Alert } from './shared/utils/alert.utils';
@@ -67,6 +68,7 @@ const NOTIFIER_CONFIG: NotifierOptions = {
     providers: [
         AuthService,
         UserService,
+        ReferralService,
         LoadingScreen,
         Alert,
         Modal,

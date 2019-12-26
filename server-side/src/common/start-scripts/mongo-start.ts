@@ -17,7 +17,7 @@ export default async () => {
 
         logger.info('MongoDB successfully connected!');
         DeploymentCheckList.checkService('mongo');
-        
+
         return mongo;
     } catch (error) {
         throw new Error('Unable to connect to Mongo DB: ' + error.message);

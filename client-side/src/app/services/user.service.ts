@@ -12,12 +12,8 @@ export class UserService {
     constructor(private http: HttpClient) {
     }
 
-    getUsers() {
-        return this.http.get<IUser[]>(this.planBasedURL);
-    }
-
-    sendPasswordResetEmail() {
-        return this.http.post<IUser[]>(this.planBasedURL + '/password-reset-email', null);
+    getUser() {
+        return this.http.get<IUser>(this.planBasedURL + '/current');
     }
 
 }
