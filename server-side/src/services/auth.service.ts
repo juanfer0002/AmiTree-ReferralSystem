@@ -46,8 +46,8 @@ class AuthService {
         const savedUser = await UserRepository.save(user);
 
         if (referral) {
-            await AuthService.addCreditToReferralOwnerIfConditionsMet(referral);
             await AuthService.updateReferralWithJoinedUser(referral, savedUser);
+            await AuthService.addCreditToReferralOwnerIfConditionsMet(referral);
         }
     }
 
@@ -90,7 +90,7 @@ class AuthService {
 
     private static async addCreditToReferralOwnerIfConditionsMet(referral: IReferral): Promise<void> {
 
-        if (referral.joinedUsers.length === 0) {
+        if (referral.joinedUsers.length == MAX_REFERRALS) {
             const uid = referral.owner._id;
             const ownerUser = await UserRepository.findById(uid);
 
