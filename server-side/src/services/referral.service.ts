@@ -19,10 +19,6 @@ export class ReferralService {
         return savedReferral._id.toHexString();
     }
 
-    public static findReferralById(uid: string): Promise<IReferral> {
-        return ReferralRepository.findById(uid);
-    }
-
     public static async getReferralInfoByUserId(uid: string): Promise<IReferralInfo> {
         const currentReferral = await ReferralRepository.findLatestByOwnerId(uid);
         const currentCount = await ReferralRepository.countJoinedUsersByOwner(uid);

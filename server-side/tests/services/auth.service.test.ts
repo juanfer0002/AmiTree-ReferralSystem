@@ -19,7 +19,7 @@ describe('User ', () => {
         pwdCompare.mockClear();
     });
 
-    it("should sign sign in", async () => {
+    it("should sign in", async () => {
 
         findByEmailMock.mockImplementationOnce((email: string) => Promise.resolve({
             _id: new ObjectId(),
@@ -45,7 +45,7 @@ describe('User ', () => {
         expect(pwdCompare).toHaveBeenCalledTimes(1);
     });
 
-    it("should NOT sign sign in if email does not exist", async () => {
+    it("should NOT sign in if email does not exist", async () => {
         expect.hasAssertions();
 
         findByEmailMock.mockImplementationOnce(() => Promise.resolve(null));
@@ -67,7 +67,7 @@ describe('User ', () => {
         }
     });
 
-    it("should NOT sign sign in if passwords do not match", async () => {
+    it("should NOT sign in if passwords do not match", async () => {
         expect.hasAssertions();
 
         findByEmailMock.mockImplementationOnce((email: string) => Promise.resolve({

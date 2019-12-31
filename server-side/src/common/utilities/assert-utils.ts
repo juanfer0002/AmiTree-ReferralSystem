@@ -1,4 +1,4 @@
-import { CustomValidationError } from "./error";
+import { CustomValidationError } from './error';
 
 export interface IDateRange { start: Date; end: Date; }
 export interface ITimestampRange { start: number; end: number; }
