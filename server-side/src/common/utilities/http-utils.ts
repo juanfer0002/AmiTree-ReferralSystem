@@ -1,7 +1,7 @@
 import { Request } from 'express-serve-static-core';
 import jwt from 'jsonwebtoken';
-import { EmailAlreadyInUseError, ForbiddenError, UnauthorizedError } from '../auth/auth-errors';
-import { AssertionError } from './assert-utils';
+import { ForbiddenError } from '../auth/auth-errors';
+import { CustomValidationError } from './error';
 import { LoggerUtils } from './logger-utils';
 
 const JWT_SECRET_PASS: string = process.env.TOKEN_PASS;
@@ -23,8 +23,7 @@ export class HttpUtils {
         let errorResponse: IHttErrorResponse;
 
         logger.error('Handling error during request resolution: ', e);
-        if (e instanceof UnauthorizedError || e instanceof ForbiddenError ||
-            e instanceof EmailAlreadyInUseError || e instanceof AssertionError) {
+        if (e instanceof CustomValidationError) {
 
             errorResponse = {
                 code: e.code,

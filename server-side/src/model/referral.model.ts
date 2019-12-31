@@ -19,7 +19,7 @@ const ReferralSchema = new Schema({
     owner: { type: Schema.Types.ObjectId, ref: 'users', required: true },
     joinedUsers: [{ type: Schema.Types.ObjectId, ref: 'users' }],
     date: { type: Date },
-    active: { type: Number, required: true, default: true },
+    active: { type: Boolean, required: true, default: true },
 });
 
 ReferralSchema.pre('save', function (this: IReferralDocument, next) {

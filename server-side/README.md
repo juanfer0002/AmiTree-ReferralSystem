@@ -49,6 +49,8 @@ You must set up the following environment variables:
 - LOG_LEVEL: (default: debug) available options: emerg, alert, crit, error, warning, notice, info, debug (from Highest to lowest priority)
 - LOG_PATH: (default: logs/) disk path location where logs should be put, this is a folder path.
 - MAX_REFERRALS_BY_CODE: maximum amount of users that can join by a single referral
+- REFERRED_USER_CREDIT: Credit that user that is referred gets by joining in
+- OWNER_REFERRED_USER_CREDIT: Credit that owner of the referred user gets by joining in
 
 You can use `.env` file where you set up those variables, located directly in server-side folder.
 The following example can work for development evironment
@@ -64,7 +66,10 @@ ENABLE_CONSOLE_LOG=true
 LOG_LEVEL=info
 LOG_PATH=logs/
 
-MAX_REFERRALS_BY_CODE = 5
+MAX_REFERRALS_BY_CODE=5
+
+REFERRED_USER_CREDIT=10
+OWNER_REFERRED_USER_CREDIT=10
 ```
 You must now be ready to start developing
 

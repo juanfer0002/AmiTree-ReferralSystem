@@ -3,13 +3,9 @@ import express from 'express';
 import { Request, Response } from 'express-serve-static-core';
 import { IAuth, ISignUp } from '../common/auth/auth';
 import { HttpUtils } from '../common/utilities/http-utils';
-import { LoggerUtils } from '../common/utilities/logger-utils';
 import AuthService from '../services/auth.service';
 
-const JWT_SECRET_PASS: string = process.env.TOKEN_PASS;
-
 const router = express.Router();
-const logger = LoggerUtils.getLogger('auth.route');
 
 router.post('/signin', async (req: Request, res: Response) => {
     try {
@@ -30,6 +26,19 @@ router.post('/signup', async (req: Request, res: Response) => {
         const signup: ISignUp = req.body;
         const tokenResponse = await AuthService.signUp(signup);
         res.send(tokenResponse);
+
+    } catch (e) {
+        const response = HttpUtils.handleUncaughtError(e);
+        res.status(response.code).send(response.message);
+    }
+});
+
+router.get('/referral-validity/:referralCode', async (req: Request, res: Response) => {
+    try {
+
+        const referralCode: string = req.params.referralCode;
+        const isValid = await AuthService.validateReferralCodeIsValid(referralCode);
+        res.send({ isValid });
 
     } catch (e) {
         const response = HttpUtils.handleUncaughtError(e);

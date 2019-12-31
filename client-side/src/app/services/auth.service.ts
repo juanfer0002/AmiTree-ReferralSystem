@@ -20,4 +20,8 @@ export class AuthService {
         return this.http.post<void>(this.planBasedURL + '/signup', signup);
     }
 
+    validateReferallCodeIsValid(referralCode: string) {
+        return this.http.get<{ isValid: boolean }>(this.planBasedURL + '/referral-validity/' + referralCode);
+    }
+
 }

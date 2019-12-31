@@ -4,6 +4,7 @@ import { ISignUp } from 'src/app/model/auth';
 import { AuthService } from 'src/app/services/auth.service';
 import { FORM_ERROR_MSGS, SIGNUP_MSGS } from 'src/app/shared/constants/forms.constants';
 import { Alert } from 'src/app/shared/utils/alert.utils';
+import { Router, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-signup',
@@ -20,7 +21,11 @@ export class SignupComponent implements OnInit {
     submitted = false;
     signupForm: FormGroup;
 
+    referral: string = null;
+
     constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute,
         private alert: Alert,
         private authService: AuthService
     ) { }
@@ -35,6 +40,18 @@ export class SignupComponent implements OnInit {
             password: new FormControl('', [Validators.required, Validators.maxLength(100)]),
             repeatPassword: new FormControl('', [Validators.required, Validators.maxLength(100)])
         }, { validators: this.validateSamePasswords });
+
+        this.loadReferralFromURL();
+    }
+
+    async loadReferralFromURL() {
+        const referralCode = this.activatedRoute.snapshot.params.referralCode;
+
+        if (referralCode) {
+            const response = await this.authService.validateReferallCodeIsValid(referralCode).toPromise();
+            console.log('response.isValid ', response.isValid );
+            this.referral = response.isValid ? referralCode : null;
+        }
     }
 
     get fields() {
@@ -65,13 +82,13 @@ export class SignupComponent implements OnInit {
         if (this.signupForm.valid) {
             const auth: ISignUp = {
                 user: this.signupForm.value,
-                // TODO: add referral
+                referral: this.referral
             }
 
             await this.authService.signUp(auth).toPromise();
             this.alert.popSuccess(this.signupMsgs.SUCCESS);
             this.disableSubmit = true;
-            setTimeout(() => window.location.reload(), 2000);
+            setTimeout(() => this.router.navigate(['/signin']), 2000);
         } else {
             this.alert.popWarn(this.formErrorMsgs.FORM_ERRORS);
         }

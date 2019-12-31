@@ -1,4 +1,6 @@
-export class UnauthorizedError extends Error {
+import { CustomValidationError } from '../utilities/error';
+
+export class UnauthorizedError extends CustomValidationError {
 
     constructor() {
         super('Email or password wrong.');
@@ -10,7 +12,7 @@ export class UnauthorizedError extends Error {
 
 }
 
-export class ForbiddenError extends Error {
+export class ForbiddenError extends CustomValidationError {
 
     constructor() {
         super('Auth needed to access this action.');
@@ -22,7 +24,7 @@ export class ForbiddenError extends Error {
 
 }
 
-export class EmailAlreadyInUseError extends Error {
+export class EmailAlreadyInUseError extends CustomValidationError {
 
     constructor() {
         super('Email is already in use. Try another.');

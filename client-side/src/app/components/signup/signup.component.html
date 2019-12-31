@@ -24,6 +24,10 @@
 
                             <div class="divider dropdown-divider"></div>
 
+                            <div *ngIf="!!referral" class="alert alert-success" role="alert">
+                                You have been referred by a friend. You'll get some free credit if you sign up right now.
+                            </div>
+
                             <form [formGroup]="signupForm" (submit)="signUp()" novalidate autocomplete="off">
 
                                 <div class="md-form">

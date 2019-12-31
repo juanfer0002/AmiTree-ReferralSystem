@@ -47,7 +47,7 @@ export class AccountComponent implements OnInit {
     copyToClipboard() {
         const urlToCopy = window.location.origin + '/signup/' + this.referralnfo.currentActiveCode;
         Utils.copyToClipboard(urlToCopy);
-        this.alert.popSuccess('URL copied to your clipboard!!!')
+        this.alert.popSuccess('An URL has been copied to your clipboard!!! SHARE it with your friends!!')
     }
 
 }
