@@ -33,10 +33,26 @@ class ReferralRepository {
     }
 
     public static async countJoinedUsersByOwner(uid: string | ObjectId | ObjectID): Promise<number> {
-        const invoices = await Referral.find({ owner: new ObjectId(uid) })
-            .exec();
+        const countResult = await Referral.aggregate([
+            {
+                $match: { owner: new ObjectId(uid) }
+            },
+            {
+                $project: {
+                    owner: '$owner',
+                    active: '$active',
+                    joinedCount: { $size: '$joinedUsers' }
+                }
+            },
+            {
+                $group: {
+                    _id: '$owner',
+                    total: { $sum: '$joinedCount' }
+                }
+            }
+        ]).exec();
 
-        return 0; // TODO: implement
+        return countResult.length > 0 ? countResult[0].total : 0;
     }
 
 }
