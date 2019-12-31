@@ -3,7 +3,7 @@ import express from 'express';
 import { Request, Response } from 'express-serve-static-core';
 import { IAuth, ISignUp } from '../common/auth/auth';
 import { HttpUtils } from '../common/utilities/http-utils';
-import AuthService from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
 
 const router = express.Router();
 

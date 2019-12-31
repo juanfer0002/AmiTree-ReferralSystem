@@ -4,7 +4,6 @@ import { IUser } from '../../model/user.model';
 export interface IAuth {
     email: string;
     password: string;
-    lastConnection: Date;
 }
 
 export interface ISignUp {

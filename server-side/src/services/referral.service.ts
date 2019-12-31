@@ -1,10 +1,10 @@
 import { IReferralInfo } from '../common/referrals/referral';
 import { CurrentActiveReferralError } from '../common/referrals/referral-errors';
 import { IReferral } from '../model/referral.model';
-import ReferralRepository from '../repositories/referral.repository';
-import UserRepository from '../repositories/user.repository';
+import { ReferralRepository } from '../repositories/referral.repository';
+import { UserRepository } from '../repositories/user.repository';
 
-class ReferralService {
+export class ReferralService {
 
     public static async createNewReferralForUserId(uid: string): Promise<string> {
         await ReferralService.assertCurrentRefferalExists(uid);
@@ -43,5 +43,3 @@ class ReferralService {
     }
 
 }
-
-export default ReferralService;

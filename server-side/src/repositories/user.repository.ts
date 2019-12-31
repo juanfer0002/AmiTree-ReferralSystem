@@ -1,7 +1,7 @@
 import { ObjectId, ObjectID } from 'bson';
 import User, { IUser } from '../model/user.model';
 
-class UserRepository {
+export class UserRepository {
 
     public static async save(source: IUser): Promise<IUser> {
         let result: IUser;
@@ -36,5 +36,3 @@ class UserRepository {
     }
 
 }
-
-export default UserRepository;

@@ -2,7 +2,7 @@
 import express from 'express';
 import { Request, Response } from 'express-serve-static-core';
 import { HttpUtils } from '../common/utilities/http-utils';
-import ReferralService from '../services/referral.service';
+import { ReferralService } from '../services/referral.service';
 
 const router = express.Router();
 

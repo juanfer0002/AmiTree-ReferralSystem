@@ -6,8 +6,8 @@ import { NotValidReferralError } from '../common/referrals/referral-errors';
 import { AssertUtils } from '../common/utilities/assert-utils';
 import { IReferral } from '../model/referral.model';
 import { IUser } from '../model/user.model';
-import ReferralRepository from '../repositories/referral.repository';
-import UserRepository from '../repositories/user.repository';
+import { ReferralRepository } from '../repositories/referral.repository';
+import { UserRepository } from '../repositories/user.repository';
 
 const JWT_SECRET_PASS: string = process.env.TOKEN_PASS;
 const DAY_IN_SECS = 60 * 60 * 24;
@@ -18,7 +18,7 @@ const MAX_REFERRALS = parseInt(process.env.MAX_REFERRALS_BY_CODE, 10) || 5;
 const REFERRED_CREDIT = parseInt(process.env.REFERRED_USER_CREDIT, 10) || 10;
 const OWNER_REFERRED_CREDIT = parseInt(process.env.OWNER_REFERRED_USER_CREDIT, 10) || 10;
 
-class AuthService {
+export class AuthService {
 
     public static async signIn(auth: IAuth): Promise<ITokenResponse> {
         const user = await UserRepository.findByEmailWithPassword(auth.email);
@@ -108,4 +108,3 @@ class AuthService {
 
 }
 
-export default AuthService;

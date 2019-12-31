@@ -1,3 +1,4 @@
+import { CustomValidationError } from "./error";
 
 export interface IDateRange { start: Date; end: Date; }
 export interface ITimestampRange { start: number; end: number; }
@@ -20,7 +21,7 @@ export class AssertUtils {
 
 }
 
-export class AssertionError extends Error {
+export class AssertionError extends CustomValidationError {
 
     constructor() {
         super('A validation has failed, communicate with support.');

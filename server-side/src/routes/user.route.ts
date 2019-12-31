@@ -2,7 +2,7 @@
 import express from 'express';
 import { Request, Response } from 'express-serve-static-core';
 import { HttpUtils } from '../common/utilities/http-utils';
-import UserService from '../services/user.service';
+import { UserService } from '../services/user.service';
 
 const router = express.Router();
 

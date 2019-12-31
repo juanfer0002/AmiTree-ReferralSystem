@@ -1,7 +1,7 @@
 import { ObjectId, ObjectID } from 'bson';
 import Referral, { IReferral } from '../model/referral.model';
 
-class ReferralRepository {
+export class ReferralRepository {
 
     public static async save(source: IReferral): Promise<IReferral> {
         let result: IReferral;
@@ -56,5 +56,3 @@ class ReferralRepository {
     }
 
 }
-
-export default ReferralRepository;
