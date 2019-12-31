@@ -25,7 +25,6 @@
         "winston": "3.2.1"
     },
     "devDependencies": {
-        "@shelf/jest-mongodb": "1.1.3",
         "@types/bcrypt": "3.0.0",
         "@types/cors": "2.8.5",
         "@types/dotenv": "6.1.1",

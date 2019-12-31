@@ -1,57 +1,97 @@
 require('../shared/setup-env');
 
-import { Mongoose } from "mongoose";
-import TestMongoStart from "../../src/common/start-scripts/mongo-start";
-import User from "../../src/model/user.model";
-import AuthService from '../../src/services/auth.service';
+import { ObjectId } from 'bson';
+import { IAuth, PasswordUtils } from '../../src/common/auth/auth';
+import User, { IUser } from "../../src/model/user.model";
+import { UserRepository } from "../../src/repositories/user.repository";
+import { AuthService } from '../../src/services/auth.service';
+import { UnauthorizedError } from '../../src/common/auth/auth-errors';
 
+const TOKEN_PREFIX = 'Bearer ';
 
-describe('Customer ', () => {
+describe('User ', () => {
 
-    let mongoose: Mongoose;
-    beforeAll(async () => {
-        mongoose = await TestMongoStart();
-    });
-
-    afterAll(async () => {
-        await mongoose.connection.close();
-    });
+    const findByEmailMock = jest.spyOn(UserRepository, "findByEmailWithPassword");
+    const pwdCompare = jest.spyOn(PasswordUtils, "compare");
 
     beforeEach(async () => {
+        findByEmailMock.mockClear();
+        pwdCompare.mockClear();
     });
 
-    afterEach(async () => {
-        await User.deleteMany({}).exec();
-    })
+    it("should sign sign in", async () => {
 
-    // it("should sign up with new account", async () => {
-    //     const account = {
-    //         email: "new.email@testing.com",
-    //         companyName: "Test company"
-    //     } as IAccount;
+        findByEmailMock.mockImplementationOnce((email: string) => Promise.resolve({
+            _id: new ObjectId(),
+            email
+        } as IUser));
 
-    //     const result = await AuthService.signUp(account);
+        pwdCompare.mockImplementationOnce(() => true);
 
-    //     expect(result._id).toBeTruthy();
-    //     expect(mailMock.mock.calls.length).toEqual(1);
+        const auth: IAuth = {
+            email: 'some@email.com',
+            password: '123'
+        };
 
-    //     const foundAccount = await Account.findOne({ email: account.email }).exec()
-    //     expect(foundAccount).toBeTruthy();
-    // });
+        const response = await AuthService.signIn(auth);
 
-    // it("should sign up with existing account with no master user already", async () => {
-    //     const account = {
-    //         email: "test.email@testing.com",
-    //         companyName: "Test company",
-    //     } as IAccount;
+        expect(response).toBeTruthy();
+        expect(response.token).toBeTruthy();
 
-    //     const savingAccount = new Account(account);
-    //     await savingAccount.save();
+        const startWithPrefix = response.token.startsWith(TOKEN_PREFIX);
+        expect(startWithPrefix).toBeTruthy();
 
-    //     const result = await AuthService.signUp(account);
+        expect(findByEmailMock).toHaveBeenCalledTimes(1);
+        expect(pwdCompare).toHaveBeenCalledTimes(1);
+    });
 
-    //     expect(result._id).toEqual(savingAccount._id);
-    //     expect(mailMock.mock.calls.length).toEqual(1);
-    // });
+    it("should NOT sign sign in if email does not exist", async () => {
+        expect.hasAssertions();
+
+        findByEmailMock.mockImplementationOnce(() => Promise.resolve(null));
+
+        try {
+            const auth: IAuth = {
+                email: 'some@email.com',
+                password: '123'
+            };
+
+
+            await AuthService.signIn(auth);
+
+        } catch (e) {
+            expect(e).toBeInstanceOf(UnauthorizedError);
+
+            expect(findByEmailMock).toHaveBeenCalledTimes(1);
+            expect(pwdCompare).not.toHaveBeenCalled();
+        }
+    });
+
+    it("should NOT sign sign in if passwords do not match", async () => {
+        expect.hasAssertions();
+
+        findByEmailMock.mockImplementationOnce((email: string) => Promise.resolve({
+            _id: new ObjectId(),
+            email
+        } as IUser));
+
+        pwdCompare.mockImplementationOnce(() => false);
+
+        try {
+            const auth: IAuth = {
+                email: 'some@email.com',
+                password: '123'
+            };
+
+
+            await AuthService.signIn(auth);
+
+        } catch (e) {
+            expect(e).toBeInstanceOf(UnauthorizedError);
+
+            expect(findByEmailMock).toHaveBeenCalledTimes(1);
+            expect(pwdCompare).toHaveBeenCalledTimes(1);
+        }
+    });
 
 });
