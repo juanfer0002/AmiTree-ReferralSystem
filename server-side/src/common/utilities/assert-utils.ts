@@ -23,8 +23,8 @@ export class AssertUtils {
 
 export class AssertionError extends CustomValidationError {
 
-    constructor() {
-        super('A validation has failed, communicate with support.');
+    constructor(msg = 'A validation has failed, communicate with support.') {
+        super(msg);
     }
 
     get code() {
@@ -32,7 +32,7 @@ export class AssertionError extends CustomValidationError {
     }
 }
 
-export class NullAssertionError extends Error {
+export class NullAssertionError extends AssertionError {
 
     constructor(msg: string = 'Variable is null') {
         super(msg);
@@ -40,7 +40,7 @@ export class NullAssertionError extends Error {
 
 }
 
-export class EmptyAssertionError extends Error {
+export class EmptyAssertionError extends AssertionError {
 
     constructor(msg: string = 'Variable is empty') {
         super(msg);

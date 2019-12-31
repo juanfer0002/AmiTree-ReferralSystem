@@ -81,7 +81,7 @@ export class AuthService {
     private static async validateAndGetReferral(referralCode: string): Promise<IReferral> {
         const referral = await ReferralRepository.findById(referralCode);
 
-        if (!referral || referral.joinedUsers.length >= MAX_REFERRALS) {
+        if (!referral || !referral.active || referral.joinedUsers.length >= MAX_REFERRALS) {
             throw new NotValidReferralError();
         }
 
