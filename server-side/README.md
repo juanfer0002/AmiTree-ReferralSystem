@@ -73,6 +73,17 @@ OWNER_REFERRED_USER_CREDIT=10
 ```
 You must now be ready to start developing
 
+# Database configuration
+
+You can install a local MongoDB instance or use an external instance:
+
+Just set up the `MONGO_URL` env variable as explained above.
+
+You can install MongoDB from the following link: https://www.mongodb.com/what-is-mongodb
+
+The following link has specific instructions for linux systems: https://docs.mongodb.com/manual/administration/install-on-linux/
+
+
 # Development server
 
 Run in the command line
@@ -82,17 +93,16 @@ npm start
 ```
 
 You will need to run this command every time you change a file.
-If some file doesn't compile or linter can't fix problems server won't start 
+If some file doesn't compile or the linter can't fix problems server won't start 
 
 # IMPORTANT INFORMATION:
 
 Here you can find some considerations for understanding the server implementation:
 
 Here you can find what each library is for:
-cors: Implements cors with express
-dotenv: Used to load environment variables through .env file
-express: Loads a server for implements restful services
-jsonwebtoken: Creates and validates JWT
-lodash: Utilities, mainly used for rounding numbers in this project
-mongoose: Conencts to MongoDB
-winston: Tool used for logging errors and messages
+- cors: Implements cors with express
+- dotenv: Used to load environment variables through .env file
+- express: Loads a server for implements restful services
+- jsonwebtoken: Creates and validates JWT
+- mongoose: Conencts to MongoDB
+- winston: Tool used for logging errors and messages
