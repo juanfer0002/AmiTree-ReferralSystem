@@ -108,3 +108,31 @@ Here you can find what each library is for:
 - jsonwebtoken: Creates and validates JWT
 - mongoose: Conencts to MongoDB
 - winston: Tool used for logging errors and messages
+- jest: Tool for unit testing
+
+
+# Unit testing
+
+## Install jest
+
+Execute in the command line:
+
+```
+npm install -g jest
+```
+
+
+And check it installed correctly by checking its version:
+
+```
+jest -v
+```
+
+## Run tests
+
+
+Execute in the command line:
+
+```
+jest
+```
