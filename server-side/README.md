@@ -53,7 +53,7 @@ You must set up the following environment variables:
 - OWNER_REFERRED_USER_CREDIT: Credit that owner of the referred user gets by joining in
 
 You can use `.env` file where you set up those variables, located directly in server-side folder.
-The following example can work for development evironment
+The following example can work for a development environment
 
 /.env
 ```
@@ -94,6 +94,8 @@ npm start
 
 You will need to run this command every time you change a file.
 If some file doesn't compile or the linter can't fix problems server won't start 
+
+Wait for the message **CONFIRMED!! SERVER IS UP** to appear, after this you'll know server started correctly.
 
 # IMPORTANT INFORMATION:
 
