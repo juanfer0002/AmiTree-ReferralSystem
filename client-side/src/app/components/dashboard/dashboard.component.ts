@@ -71,7 +71,6 @@ export class DashboardComponent implements OnInit {
 
         this.clearMoves();
         this.highlightAllPossibleMoves(token, this.activePlayer);
-        console.log('finishing');
     }
 
     toggleActivePlayer() {
@@ -92,7 +91,7 @@ export class DashboardComponent implements OnInit {
         let startLeftY = pos.y + 1;
         let nextRightY = pos.y - 1;
 
-        // this.currentLeftMoves = this.calculateAllLeftMoves(startX, startLeftY, 'L', modifier);
+        this.currentLeftMoves = this.calculateAllLeftMoves(startX, startLeftY, 'L', modifier);
         this.currentRightMoves = this.calculateAllLeftMoves(startX, nextRightY, 'R', modifier);
     }
 
@@ -102,7 +101,6 @@ export class DashboardComponent implements OnInit {
 
         let nextX = startX;
         let nextY = startY;
-
 
         while (nextX >= 0 && nextX < this.board.length && nextY >= 0 && nextY < this.board[nextX].length) {
             const pos = this.board[nextX][nextY];
@@ -118,24 +116,37 @@ export class DashboardComponent implements OnInit {
     }
 
     stripToRealMoves(moves: Position[]) {
+        let idxToSubstringUntil: number = 0;
+        let firstMove = moves[0];
+        let nextMoveShouldBe: 'enemy' | 'empty' | 'none' = 'empty';
 
-        let idxToSubstringUntil: number = null;
-        for (let i = 0; i < moves.length && idxToSubstringUntil === null; i++) {
-            const move = moves[i];
-
-            if (!move.hasToken && i == 0) {
+        if (firstMove) {
+            if (firstMove.hasToken && firstMove.tokenType == this.activePlayer) {
+                nextMoveShouldBe = 'none';
+            } else if (firstMove.hasToken) {
+                nextMoveShouldBe = 'enemy';
+            } else {
                 idxToSubstringUntil = 1;
-            } else if (move.hasToken && move.tokenType == this.activePlayer) {
-                idxToSubstringUntil = (i - 1) < 0 ? 0 : (i - 1);
-            } else if (move.hasToken) {
-                const nextMove = moves[i + 1];
-                if (nextMove && nextMove.hasToken) {
-                    idxToSubstringUntil = i;
+                nextMoveShouldBe = 'none';
+            }
+
+            for (let i = 0; i < moves.length && nextMoveShouldBe != 'none'; i++) {
+                const move = moves[i];
+
+                const isEnemy = nextMoveShouldBe == 'enemy' && move.hasToken && move.tokenType != this.activePlayer;
+                const isEmpty = nextMoveShouldBe == 'empty' && !move.hasToken;
+
+                if (isEnemy || isEmpty) {
+                    idxToSubstringUntil++;
+                    nextMoveShouldBe = nextMoveShouldBe == 'enemy' ? 'empty' : 'enemy';
+                } else {
+                    nextMoveShouldBe = 'none';
                 }
             }
+
         }
 
-        return moves.slice(0, idxToSubstringUntil || 0);
+        return moves.slice(0, idxToSubstringUntil);
     }
 
     doHighlightToMoves(moves: Position[]) {
@@ -149,19 +160,30 @@ export class DashboardComponent implements OnInit {
     moveSelectedToken(newPosition: Position) {
         newPosition.tokenType = this.selectedToken.tokenType;
         this.selectedToken.tokenType = 'none';
+        this.removeEatenTokens(newPosition);
 
         this.selectedToken = null;
+        this.currentLeftMoves = null;
+        this.currentRightMoves = null;
 
         this.clearMoves();
         this.toggleActivePlayer();
     }
 
-}
+    removeEatenTokens(newPosition: Position) {
+        const condition = (cm: Position) => cm == newPosition;
 
-class Move {
-    position: Position;
-    nextRightMove?: Move = null;
-    nextLeftMove?: Move = null;
+        let foundIdx = this.currentLeftMoves.findIndex(condition);
+        const foundInLefts = foundIdx > -1;
+        foundIdx = foundInLefts ? foundIdx : this.currentRightMoves.findIndex(condition);
+
+        const searchOn = foundInLefts ? this.currentLeftMoves : this.currentRightMoves;
+        for (let i = 0; i < foundIdx; i++) {
+            searchOn[i].tokenType = 'none';
+            console.log('coming right up');
+        }
+    }
+
 }
 
 class Position {
