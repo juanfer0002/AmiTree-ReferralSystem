@@ -9,7 +9,7 @@ import { CanActivateRouteGuard } from './guards/can-activate.guards';
 
 const routes: Routes = [
     { path: '', redirectTo: 'signin', pathMatch: 'full' },
-    { path: 'signin', component: SigninComponent, canActivate: [CanActivateRouteGuard] },
+    { path: 'signin', component: DashboardComponent, canActivate: [CanActivateRouteGuard] },
     { path: 'signup', component: SignupComponent, canActivate: [CanActivateRouteGuard] },
     { path: 'signup/:referralCode', component: SignupComponent, canActivate: [CanActivateRouteGuard] },
     { path: 'dashboard', component: DashboardComponent, canActivate: [CanActivateRouteGuard] },
