@@ -1,48 +1,25 @@
 
-$square-size: 6vw;
 
-.board {
-    width: fit-content;
+
+
+.cell {
+    width: 50px;
+    // max-width: 50px;
+    height: 50px;
+    border-left: thin dashed;
+    border-bottom: thin dashed;
+    // border-style: dashed;
+    // border-width: thin;
 }
 
-.row {
-    display: flex;
-    flex-direction: row;
-}
-
-.col {
-    flex: 1;
-    width: $square-size;
-    max-width: $square-size;
-    height: $square-size;
-    display: flex;
-    padding: 0;
-}
-
-.bg-white {
-    background: white;
-}
-
-.bg-black {
-    background: black;
-}
-
-.bg-hightlight {
-    background: yellowgreen;
-}
-
-.clickable {
-    cursor: pointer;
-}
-
-.token {
+.fas.fa-circle{
     font-size: xx-large;
 }
 
-.red-token {
-    color: red;
+.bg-player_1 {
+    color: orange;
 }
 
-.blue-token {
-    color: blue;
+.bg-player_2 {
+    color: yellowgreen;
 }

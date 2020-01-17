@@ -1,15 +1,20 @@
 <div class="container">
 
-    <div class="pt-5 ml-auto mr-auto board">
-        <div *ngFor="let row of board" class="row">
-            <div *ngFor="let item of row" class="col" [ngClass]="'bg-' + item.color"
-                [class.clickable]="(item.hasToken && item.tokenType == activePlayer) || item.isHighlight()"
-                (click)="doProperActionBasedOnCellContent(item) ">
-                <span *ngIf="item.hasToken" class="fa fa-circle token m-auto" [ngClass]="item.tokenColor + '-token'">
-                </span>
-            </div>
-        </div>
-    </div>
+    <h1>{{activePlayer}} {{gameover}}</h1>
 
+    <div class="board pt-5">
+
+        <div *ngFor="let row of board" class="row">
+
+            <div *ngFor="let cell of row; index as j" class="col cell" (click)="selectColumn(j)">
+
+                <span *ngIf="cell.hasToken()" class="fas fa-circle" [ngClass]="'bg-' + cell.owner">   </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
 
 </div>

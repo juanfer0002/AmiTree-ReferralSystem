@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
-type TokenType = 'player_1' | 'player_2' | 'none';
 
-const BOARD_SQUARE_SIZE = 8;
+type Player = 'player_1' | 'player_2';
+
+const BOARD_ROW_SIZE = 6;
+const BOARD_COL_SIZE = 7;
+
+const TOKEN_LENGTH_WIN = 4;
 
 @Component({
     selector: 'app-dashboard',
@@ -11,228 +15,154 @@ const BOARD_SQUARE_SIZE = 8;
 })
 export class DashboardComponent implements OnInit {
 
-    selectedToken: Position = null;
-    activePlayer: TokenType = 'player_1';
+    board: Cell[][] = [];
 
-    currentLeftMoves: Position[] = null;
-    currentRightMoves: Position[] = null;
+    activePlayer: Player = 'player_1';
 
-    board: Position[][] = [];
+    gameover = false;
 
     constructor() {
         this.initBoard();
-        this.restartGame();
     }
 
     ngOnInit() {
     }
 
     initBoard() {
-        for (let i = 0; i < BOARD_SQUARE_SIZE; i++) {
+        for (let i = 0; i < BOARD_ROW_SIZE; i++) {
             const row = [];
+
+            for (let j = 0; j < BOARD_COL_SIZE; j++) {
+                row.push(new Cell(i, j));
+            }
+
             this.board.push(row);
+        }
+    }
 
-            for (let j = 0; j < BOARD_SQUARE_SIZE; j++) {
-                row.push(new Position(i, j));
+    selectColumn(column: number) {
+        let foundEmptySpot: Cell = null;
+
+        for (let i = BOARD_ROW_SIZE - 1; i >= 0 && !foundEmptySpot; i--) {
+            let spot = this.board[i][column];
+            foundEmptySpot = !spot.hasToken() ? spot : null;
+        }
+
+        foundEmptySpot && foundEmptySpot.changePlayer(this.activePlayer);
+
+        this.checkIfPlayerWon();
+        this.togglePlayer();
+    }
+
+    checkIfPlayerWon() {
+        this.gameover = this.checkIfPlayerWonByRow();
+        this.gameover = this.gameover || this.checkIfPlayerWonByColumn();
+        this.gameover = this.gameover || this.checkIfPlayerWonByDiagonalLRDown();
+        this.gameover = this.gameover || this.checkIfPlayerWonByDiagonalRLDown();
+    }
+
+    checkIfPlayerWonByRow() {
+        let won = false;
+
+        let count = 0;
+        for (let i = 0; i < BOARD_ROW_SIZE && !won; i++) {
+            count = 0;
+
+            for (let j = 0; j < BOARD_COL_SIZE && !won; j++) {
+                const cell = this.board[i][j];
+                count = cell.owner == this.activePlayer ? count + 1 : 0;
+                won = count == TOKEN_LENGTH_WIN;
             }
         }
+
+        return won;
     }
 
-    restartGame() {
-        this.placeStartingToken(0, 'player_1');
-        this.placeStartingToken(5, 'player_2');
+    checkIfPlayerWonByColumn() {
+        let won = false;
 
-    }
+        let count = 0;
+        for (let j = 0; j < BOARD_COL_SIZE && !won; j++) {
+            count = 0;
 
-    placeStartingToken(startRow: number, player: TokenType) {
-        let modParity = player == 'player_1' ? 0 : 1;
-
-        for (let i = 0, nextRow = startRow; i < 3 && nextRow < this.board.length; i++ , nextRow++) {
-
-            for (let j = modParity; j < this.board[i].length; j += 2) {
-                const position = this.board[nextRow][j];
-                position.tokenType = player;
-            }
-
-            modParity = (modParity + 1) % 2;
-        }
-    }
-
-    doProperActionBasedOnCellContent(item: Position) {
-        if (item.tokenType == this.activePlayer && item.hasToken) {
-            this.selectToken(item)
-        } else if (item.isHighlight()) {
-            this.moveSelectedToken(item);
-        }
-    }
-
-    selectToken(token: Position) {
-        this.selectedToken = token;
-
-        this.clearMoves();
-        this.highlightAllPossibleMoves(token, this.activePlayer);
-    }
-
-    toggleActivePlayer() {
-        this.activePlayer = this.activePlayer == 'player_1' ? 'player_2' : 'player_1';
-    }
-
-    clearMoves() {
-        for (let i = 0; i < BOARD_SQUARE_SIZE; i++) {
-            for (let j = 0; j < BOARD_SQUARE_SIZE; j++) {
-                this.board[i][j].setProperColor();
+            for (let i = 0; i < BOARD_ROW_SIZE && !won; i++) {
+                const cell = this.board[i][j];
+                count = cell.owner == this.activePlayer ? count + 1 : 0;
+                won = count == TOKEN_LENGTH_WIN;
             }
         }
+
+        return won;
     }
 
-    highlightAllPossibleMoves(pos: Position, player: TokenType) {
-        const modifier = this.getPlayerPositionModifier(player);
-        let startX = pos.x + modifier;
-        let startLeftY = pos.y + 1;
-        let nextRightY = pos.y - 1;
+    checkIfPlayerWonByDiagonalLRDown() {
+        let won = false;
 
-        this.currentLeftMoves = this.calculateAllLeftMoves(startX, startLeftY, 'L', modifier);
-        this.currentRightMoves = this.calculateAllLeftMoves(startX, nextRightY, 'R', modifier);
-    }
-
-    calculateAllLeftMoves(startX: number, startY: number, directionModifier: 'R' | 'L', modifier: number) {
-        const moves: Position[] = [];
-        const dirModifierValue = directionModifier == 'R' ? -1 : 1;
-
-        let nextX = startX;
-        let nextY = startY;
-
-        while (nextX >= 0 && nextX < this.board.length && nextY >= 0 && nextY < this.board[nextX].length) {
-            const pos = this.board[nextX][nextY];
-            moves.push(pos);
-
-            nextX += modifier;
-            nextY += dirModifierValue;
-        }
-
-        const realMoves = this.stripToRealMoves(moves);
-        this.doHighlightToMoves(realMoves);
-        return realMoves;
-    }
-
-    stripToRealMoves(moves: Position[]) {
-        let idxToSubstringUntil: number = 0;
-        let firstMove = moves[0];
-        let nextMoveShouldBe: 'enemy' | 'empty' | 'none' = 'empty';
-
-        if (firstMove) {
-            if (firstMove.hasToken && firstMove.tokenType == this.activePlayer) {
-                nextMoveShouldBe = 'none';
-            } else if (firstMove.hasToken) {
-                nextMoveShouldBe = 'enemy';
-            } else {
-                idxToSubstringUntil = 1;
-                nextMoveShouldBe = 'none';
+        for (let i = 0; i < BOARD_ROW_SIZE && !won; i++) {
+            for (let j = 0; j < BOARD_COL_SIZE && !won; j++) {
+                won = this.checkDiagonalFromRowAndColWithModifier(i, j, 1);
             }
+        }
 
-            for (let i = 0; i < moves.length && nextMoveShouldBe != 'none'; i++) {
-                const move = moves[i];
+        return won;
+    }
 
-                const isEnemy = nextMoveShouldBe == 'enemy' && move.hasToken && move.tokenType != this.activePlayer;
-                const isEmpty = nextMoveShouldBe == 'empty' && !move.hasToken;
+    checkIfPlayerWonByDiagonalRLDown() {
+        let won = false;
 
-                if (isEnemy || isEmpty) {
-                    idxToSubstringUntil++;
-                    nextMoveShouldBe = nextMoveShouldBe == 'enemy' ? 'empty' : 'enemy';
-                } else {
-                    nextMoveShouldBe = 'none';
-                }
+        for (let i = 0; i < BOARD_ROW_SIZE && !won; i++) {
+            for (let j = BOARD_COL_SIZE - 1; j > 0 && !won; j--) {
+                won = this.checkDiagonalFromRowAndColWithModifier(i, j, -1);
             }
-
         }
 
-        return moves.slice(0, idxToSubstringUntil);
+        return won;
     }
 
-    doHighlightToMoves(moves: Position[]) {
-        moves.forEach(m => !m.hasToken && m.hightlight());
-    }
+    checkDiagonalFromRowAndColWithModifier(row: number, col: number, modifier: 1 | -1) {
+        let won = false;
+        let count = 0;
 
-    getPlayerPositionModifier(player: TokenType) {
-        return (player == 'player_1' ? 1 : -1);
-    }
+        while (!won && row < BOARD_ROW_SIZE && col >= 0 && col < BOARD_COL_SIZE) {
+            const cell = this.board[row][col];
+            count = cell.owner == this.activePlayer ? count + 1 : 0;
+            won = count == TOKEN_LENGTH_WIN;
 
-    moveSelectedToken(newPosition: Position) {
-        newPosition.tokenType = this.selectedToken.tokenType;
-        this.selectedToken.tokenType = 'none';
-        this.removeEatenTokens(newPosition);
-
-        this.selectedToken = null;
-        this.currentLeftMoves = null;
-        this.currentRightMoves = null;
-
-        this.clearMoves();
-        this.toggleActivePlayer();
-    }
-
-    removeEatenTokens(newPosition: Position) {
-        const condition = (cm: Position) => cm == newPosition;
-
-        let foundIdx = this.currentLeftMoves.findIndex(condition);
-        const foundInLefts = foundIdx > -1;
-        foundIdx = foundInLefts ? foundIdx : this.currentRightMoves.findIndex(condition);
-
-        const searchOn = foundInLefts ? this.currentLeftMoves : this.currentRightMoves;
-        for (let i = 0; i < foundIdx; i++) {
-            searchOn[i].tokenType = 'none';
-            console.log('coming right up');
+            row++;
+            col += modifier;
         }
+
+        return won;
+    }
+
+
+    togglePlayer() {
+        this.activePlayer = this.activePlayer == "player_1" ? "player_2" : "player_1";
     }
 
 }
 
-class Position {
-    readonly x: number;
-    readonly y: number;
 
-    private _tokenType: TokenType;
-    private _tokenColor: 'red' | 'blue';
+class Cell {
 
-    private _color: 'black' | 'white' | 'hightlight';
+    x: number;
+    y: number;
 
-    constructor(x: number, y: number) {
+    owner: Player;
+
+    constructor(x, y) {
         this.x = x;
         this.y = y;
 
-        this.setProperColor();
-        this._tokenType = 'none';
+        this.owner = null;
     }
 
-    set tokenType(tokenType: TokenType) {
-        this._tokenType = tokenType;
-        this._tokenColor = tokenType == "player_1" ? 'red' : 'blue';
+    changePlayer(player: Player) {
+        this.owner = player;
     }
 
-    get tokenType() {
-        return this._tokenType;
+    hasToken() {
+        return this.owner != null;
     }
 
-    get hasToken() {
-        return this._tokenType != 'none';
-    }
-
-    get tokenColor() {
-        return this._tokenColor;
-    }
-
-    get color() {
-        return this._color;
-    }
-
-    hightlight() {
-        this._color = 'hightlight';
-    }
-
-    isHighlight() {
-        return this._color == 'hightlight';
-    }
-
-    setProperColor() {
-        this._color = (this.x + this.y) % 2 == 0 ? 'black' : 'white';
-    }
 }
