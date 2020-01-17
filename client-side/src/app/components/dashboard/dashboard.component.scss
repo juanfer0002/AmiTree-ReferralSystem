@@ -1,0 +1,48 @@
+
+$square-size: 6vw;
+
+.board {
+    width: fit-content;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}
+
+.col {
+    flex: 1;
+    width: $square-size;
+    max-width: $square-size;
+    height: $square-size;
+    display: flex;
+    padding: 0;
+}
+
+.bg-white {
+    background: white;
+}
+
+.bg-black {
+    background: black;
+}
+
+.bg-hightlight {
+    background: yellowgreen;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.token {
+    font-size: xx-large;
+}
+
+.red-token {
+    color: red;
+}
+
+.blue-token {
+    color: blue;
+}
